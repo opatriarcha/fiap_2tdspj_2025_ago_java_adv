@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    List<User> findAll();
+    public List<User> findAll();
 
-    User findById(UUID id);
+    public User findById(UUID id);
 
-    User create(User user);
+    public User create(User user);
 
-    boolean existsById(UUID id);
+    public boolean existsById(UUID id);
 
-    void removeById(UUID id);
+    public void removeById(UUID id);
+
+    public void remove(User user);
+
+    public User partialUpdate(UUID id, User user);
+
 }

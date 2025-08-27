@@ -62,5 +62,4 @@ public class NonPersistentUserRepository implements UserRepository<User, UUID> {
         this.internalData.remove(this.internalData.indexOf(user));
     }
 
-
 }
