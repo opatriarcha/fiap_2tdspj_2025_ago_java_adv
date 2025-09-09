@@ -2,6 +2,7 @@ package br.com.fiap.tds._tdsq.Library.service;
 
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,4 +21,5 @@ public interface UserService {
 
     public User partialUpdate(UUID id, User user);
 
+    Collection<? extends User> findByEmail(String email);
 }

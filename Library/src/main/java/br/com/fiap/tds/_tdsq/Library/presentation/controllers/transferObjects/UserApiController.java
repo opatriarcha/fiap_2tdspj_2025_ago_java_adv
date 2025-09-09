@@ -88,4 +88,17 @@ public class UserApiController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/name")
+    public ResponseEntity<List<User>> findAllByName(@RequestParam String name){
+        return null;
+    }
+
+    //http://localhost:8080/api/users?email=teste@gmail.com
+    @GetMapping("/")
+    public ResponseEntity<List<User>> findAllByEmail(@RequestParam String email){
+        List<User> users = new ArrayList<>();
+        users.addAll(this.userService.findByEmail( email ));
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }

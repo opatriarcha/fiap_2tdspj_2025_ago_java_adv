@@ -1,22 +1,18 @@
 package br.com.fiap.tds._tdsq.Library.service;
 
+import br.com.fiap.tds._tdsq.Library.domainmodel.Post;
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 import br.com.fiap.tds._tdsq.Library.domainmodel.repositories.UserRepository;
-import br.com.fiap.tds._tdsq.Library.domainmodel.repositories.UserRepositoryImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private final UserRepositoryImpl userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<User> findAll() {
@@ -62,5 +58,17 @@ public class UserServiceImpl implements UserService{
         if(!userFromDatabase.getPassword().equals(user.getPassword()))
             userFromDatabase.setPassword(user.getPassword());
         return this.create(userFromDatabase);
+    }
+
+    @Override
+    public Collection<? extends User> findByEmail(String email) {
+        List<User> users = new LinkedList<>();
+        users.addAll(this.userRepository.findByEmail(email));
+        return users;
+    }
+
+
+    public Collection<Post> getAllPostsFromUser(User user){
+        return user.getPosts();
     }
 }

@@ -1,7 +1,6 @@
 package br.com.fiap.tds._tdsq.Library.domainmodel.repositories;
 
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import com.github.javafaker.Faker;
 
 
 @Component
-public class NonPersistentUserRepository implements UserRepository<User, UUID> {
+public class NonPersistentUserRepository implements UserRepositoryOld<User, UUID> {
 
     private List<User> internalData = new ArrayList<>();
 
