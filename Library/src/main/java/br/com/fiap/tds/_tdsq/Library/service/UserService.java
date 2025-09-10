@@ -4,12 +4,13 @@ import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
     public List<User> findAll();
 
-    public User findById(UUID id);
+    public Optional<User> findById(UUID id);
 
     public User create(User user);
 
@@ -21,5 +22,5 @@ public interface UserService {
 
     public User partialUpdate(UUID id, User user);
 
-    Collection<? extends User> findByEmail(String email);
+    List<? extends User> findByEmail(String email);
 }

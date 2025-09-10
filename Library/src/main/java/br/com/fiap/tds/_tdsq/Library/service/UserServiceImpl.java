@@ -22,8 +22,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findById(UUID id){
-        return this.userRepository.findById(id).orElse(null);
+    public Optional<User> findById(UUID id){
+        return this.userRepository.findById(id);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Collection<? extends User> findByEmail(String email) {
+    public List<? extends User> findByEmail(String email) {
         List<User> users = new LinkedList<>();
         users.addAll(this.userRepository.findByEmail(email));
         return users;
