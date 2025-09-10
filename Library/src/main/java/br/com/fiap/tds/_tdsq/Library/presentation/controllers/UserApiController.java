@@ -4,6 +4,7 @@ import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 import br.com.fiap.tds._tdsq.Library.presentation.controllers.transferObjects.UserDTO;
 import br.com.fiap.tds._tdsq.Library.service.UserService;
 import br.com.fiap.tds._tdsq.Library.service.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class UserApiController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> save(@RequestBody UserDTO userDto){
+    public ResponseEntity<UserDTO> save( @Valid @RequestBody UserDTO userDto){
         User newUser = this.userService.create(UserDTO.toEntity(userDto));
         return new ResponseEntity<>(UserDTO.fromEntity(newUser), HttpStatus.CREATED);
     }
@@ -66,7 +67,7 @@ public class UserApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable("id") UUID id, @RequestBody UserDTO userDto){
+    public ResponseEntity<UserDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody UserDTO userDto){
         if( !this.userService.existsById(id) )
             return ResponseEntity.notFound().build();
         User user = UserDTO.toEntity(userDto);
@@ -78,7 +79,7 @@ public class UserApiController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> partialUpdate(@PathVariable("id") UUID id, @RequestBody UserDTO userDto) {
+    public ResponseEntity<UserDTO> partialUpdate(@PathVariable("id") UUID id, @Valid @RequestBody UserDTO userDto) {
         User updatedUser = null;
         try {
             updatedUser = this.userService.findById(userDto.getId()).orElse(null);
