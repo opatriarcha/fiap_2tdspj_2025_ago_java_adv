@@ -1,0 +1,11 @@
+--2025-09-10 09:25:33--  http://localhost:8080/api/users/paged?page=0
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:8080... connected.
+HTTP request sent, awaiting response... 200 
+Length: unspecified [application/json]
+Saving to: ‘paged?page=0’
+
+paged?page=0                      [<=>                                              ]       0  --.-KB/s               paged?page=0                      [ <=>                                             ]     315  --.-KB/s    in 0s      
+
+2025-09-10 09:25:33 (57,3 MB/s) - ‘paged?page=0’ saved [315]
+

@@ -1,6 +1,8 @@
 package br.com.fiap.tds._tdsq.Library.service;
 
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,4 +25,6 @@ public interface UserService {
     public User partialUpdate(UUID id, User user);
 
     List<? extends User> findByEmail(String email);
+
+    public Page<User> findAllPaged(Pageable pageable);
 }

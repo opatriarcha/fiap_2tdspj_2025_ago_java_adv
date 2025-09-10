@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Parameter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -109,5 +112,14 @@ public class UserApiController {
                                 .map(UserDTO::fromEntity)
                                 .toList()));
 
+    }
+
+    //http://localhost:8080/api/users/paged?page=0&size=10&sort=name,desc
+    @GetMapping("paged")
+    public ResponseEntity<Page<UserDTO>> findAllPaged( Pageable pageable){
+        return ResponseEntity.ok(
+                        this.userService.findAllPaged(pageable)
+                                .map(UserDTO::fromEntity)
+                                );
     }
 }

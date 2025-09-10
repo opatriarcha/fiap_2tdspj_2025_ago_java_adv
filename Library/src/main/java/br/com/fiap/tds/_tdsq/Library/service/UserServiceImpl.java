@@ -4,6 +4,8 @@ import br.com.fiap.tds._tdsq.Library.domainmodel.Post;
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 import br.com.fiap.tds._tdsq.Library.domainmodel.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -65,6 +67,11 @@ public class UserServiceImpl implements UserService{
         List<User> users = new LinkedList<>();
         users.addAll(this.userRepository.findByEmail(email));
         return users;
+    }
+
+    @Override
+    public Page<User> findAllPaged(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
     }
 
 
