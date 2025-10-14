@@ -3,9 +3,11 @@ package br.com.fiap.tds._tdsq.Library.infrastructure.config;
 import br.com.fiap.tds._tdsq.Library.domainmodel.User;
 import br.com.fiap.tds._tdsq.Library.domainmodel.repositories.UserRepository;
 import com.github.javafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.UUID;
 
 @Configuration
 public class DataLoader {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     CommandLineRunner initData(UserRepository userRepository) {
@@ -35,7 +40,7 @@ public class DataLoader {
                     null,
                     "user",
                     "user@gmail.com",
-                    "0123456789"
+                    this.passwordEncoder.encode("0123456789")
             );
             users.add(loginUser);
             userRepository.saveAll(users);

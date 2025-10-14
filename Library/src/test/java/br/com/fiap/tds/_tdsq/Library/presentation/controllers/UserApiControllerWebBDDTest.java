@@ -238,7 +238,7 @@ class UserApiControllerWebBDDTest {
         @DisplayName("Dado email existente, quando filtrar, então 200 e lista DTO")
         void should_filter_by_email() throws Exception {
             var u = User.builder().id(UUID.randomUUID()).name("Fabio").email("fabio@ex.com").password("pwd").build();
-            BDDMockito.given(userService.findByEmail("fabio@ex.com")).willReturn(List.of());
+            BDDMockito.given(userService.findByEmail("fabio@ex.com")).willReturn(null);
 
             mvc.perform(get("/api/users/").param("email", "fabio@ex.com"))
                     .andExpect(status().isOk())

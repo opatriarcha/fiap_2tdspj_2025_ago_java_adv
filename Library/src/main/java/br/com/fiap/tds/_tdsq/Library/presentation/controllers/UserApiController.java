@@ -116,15 +116,9 @@ public class UserApiController {
     //http://localhost:8080/api/users?email=teste@gmail.com
     @Operation(summary = "BUsca todos os usuários com o email paramterizado",method = "GET")
     @GetMapping("/")
-    public ResponseEntity<List<UserDTO>> findAllByEmail(@RequestParam String email){
+    public ResponseEntity<UserDTO> findAllByEmail(@RequestParam String email){
 
-        return ResponseEntity.ok(
-                new ArrayList<>(
-                        this.userService.findByEmail(email)
-                .stream()
-                                .map(UserDTO::fromEntity)
-                                .toList()));
-
+        return ResponseEntity.ok(UserDTO.fromEntity(this.userService.findByEmail(email)));
     }
 
     //http://localhost:8080/api/users/paged?page=0&size=10&sort=name,desc

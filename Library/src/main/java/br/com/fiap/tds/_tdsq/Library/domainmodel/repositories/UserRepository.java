@@ -17,13 +17,13 @@ public interface UserRepository extends
         UserRepositoryCustom<User, UUID>{
 
     //Method Derived query
-    List<User> findByEmail(String email);
+//    List<User> findByEmail(String email);
     List<User> findByNameAndEmail(String name, String email);
     List<User> findByPosts(List<Post> post);
 
     //JPQL - Java Persistence Query Language
-    @Query("SELECT u FROM User u WHERE u.name = :name")
-    Optional<User> findByName(String name);
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+    Optional<User> findByEmail(String email);
 
     // Q1 (JPQL): busca o usuário por ID já fazendo fetch de profile e posts
     @Query("""

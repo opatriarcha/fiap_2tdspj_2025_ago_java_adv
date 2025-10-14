@@ -24,7 +24,7 @@ public interface UserService {
 
     public User partialUpdate(UUID id, User user);
 
-    List<? extends User> findByEmail(String email);
+    public User findByEmail(String email);
 
     public Page<User> findAllPaged(Pageable pageable);
 }

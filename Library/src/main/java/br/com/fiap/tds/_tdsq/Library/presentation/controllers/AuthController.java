@@ -25,9 +25,9 @@ public class AuthController {
     @Autowired private JwtHelper jwtHelper;
     @Autowired private UserDetailsService userDetailsService;
 
-    //    curl -X POST http://localhost:8080/auth/login \
-    //            -H "Content-Type: application/json" \
-    //            -d '{"username": "seu_usuario", "password": "sua_senha"}'
+//        curl -X POST http://localhost:8080/auth \
+//                -H "Content-Type: application/json" \
+//                -d '{"username": "user@gmail.com", "password": "0123456789"}'
 
     @PostMapping
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request){

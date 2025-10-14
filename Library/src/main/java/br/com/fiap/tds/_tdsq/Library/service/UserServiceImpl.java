@@ -63,10 +63,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<? extends User> findByEmail(String email) {
-        List<User> users = new LinkedList<>();
-        users.addAll(this.userRepository.findByEmail(email));
-        return users;
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email).orElse(null);
     }
 
     @Override
