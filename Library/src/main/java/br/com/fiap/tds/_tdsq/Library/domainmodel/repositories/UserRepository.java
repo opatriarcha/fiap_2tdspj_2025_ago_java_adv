@@ -23,7 +23,7 @@ public interface UserRepository extends
 
     //JPQL - Java Persistence Query Language
     @Query("SELECT u FROM User u WHERE u.name = :name")
-    List<User> findByName(String name);
+    Optional<User> findByName(String name);
 
     // Q1 (JPQL): busca o usuário por ID já fazendo fetch de profile e posts
     @Query("""
