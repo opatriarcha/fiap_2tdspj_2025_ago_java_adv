@@ -114,7 +114,7 @@ public class UserApiController {
     }
 
     //http://localhost:8080/api/users?email=teste@gmail.com
-    @Operation(summary = "BUsca todos os usuários com o email paramterizado",method = "GET")
+    @Operation(summary = "Busca todos os usuários com o email paramterizado",method = "GET")
     @GetMapping("/")
     public ResponseEntity<UserDTO> findAllByEmail(@RequestParam String email){
 
