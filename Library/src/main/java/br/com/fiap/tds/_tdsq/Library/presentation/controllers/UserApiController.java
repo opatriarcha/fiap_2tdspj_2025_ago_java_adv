@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.SourceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import javax.swing.*;
 
 @Slf4j
 @RestController
@@ -42,31 +45,31 @@ public class UserApiController {
     @Operation(summary = "Listar Todos os Usuarios",method = "GET")
     @GetMapping("/{id}") //http://localhost:8080/api/users/1
     public ResponseEntity<UserDTO> findById(@PathVariable("id") UUID id){
-//        User user = this.userService.findById(id);
-//        if(user == null)
-//            return ResponseEntity.notFound().build();
-//        else
-//            return ResponseEntity.ok(user);
+
         return this.userService.findById(id)
                 .map(user -> ResponseEntity.ok(UserDTO.fromEntity(user)))
                 .orElse(ResponseEntity.notFound().build());
+
     }
 
     @Operation(summary = "Insere Novo Usuario",method = "POST")
     @PostMapping
     public ResponseEntity<UserDTO> save( @Valid @RequestBody UserDTO userDto){
+
         User newUser = this.userService.create(UserDTO.toEntity(userDto));
         return new ResponseEntity<>(UserDTO.fromEntity(newUser), HttpStatus.CREATED);
-    }
 
+    }
 
     @Operation(summary = "Remove um usuário pelo ID",method = "DELETE")
     @DeleteMapping
     public ResponseEntity<Void> deleteById(@RequestBody UUID id){
+
         if( !this.userService.existsById(id ))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.notFound().build();
         this.userService.removeById(id);
         return ResponseEntity.noContent().build();
+
     }
 
     @Operation(summary = "Remove um usuário inteiro baseado no objeto User",method = "DELETE")
@@ -81,6 +84,8 @@ public class UserApiController {
     @Operation(summary = "Atualiza Totalmente o Usuario",method = "PUT")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable("id") UUID id, @Valid @RequestBody UserDTO userDto){
+        System.out.println("ENTRANDO NA PORRA D UPDATE");
+
         if( !this.userService.existsById(id) )
             return ResponseEntity.notFound().build();
         User user = UserDTO.toEntity(userDto);
@@ -121,6 +126,7 @@ public class UserApiController {
         return ResponseEntity.ok(UserDTO.fromEntity(this.userService.findByEmail(email)));
     }
 
+
     //http://localhost:8080/api/users/paged?page=0&size=10&sort=name,desc
     @Operation(summary = "Busca todos os usuarios paginados",method = "GET")
     @GetMapping("paged")
@@ -130,4 +136,6 @@ public class UserApiController {
                                 .map(UserDTO::fromEntity)
                                 );
     }
+
+
 }

@@ -17,10 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,6 +53,18 @@ public class UserApiControllerUnitTest {
             .name("")
             .email("invalido")
             .password("")
+            .build();
+
+    private final UserDTO newUser = UserDTO.builder()
+            .name("Novo")
+            .email("novo@ex.com")
+            .password("pwd123")
+            .build();
+
+    private final UserDTO correctUser = UserDTO.builder()
+            .name("Eva")
+            .email("eva@ex.com")
+            .password("123456789trouxa")
             .build();
 
 
@@ -187,4 +201,206 @@ public class UserApiControllerUnitTest {
         );
 
     }
+
+    @Nested
+    @DisplayName("DELETE /api/users")
+    class RemoveUser{
+
+        @Test
+        @DisplayName("Dado ID existente, quando deletar, entao retorne 204 o service deve ser chamado")
+        void should_return_204_when_delete_process_ok() throws Exception {
+            var id = UUID.randomUUID();
+            BDDMockito.given(userService.existsById(id)).willReturn(true);
+
+            mockMvc.perform(
+                    delete("/api/users")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                            .content(objectMapper.writeValueAsString(id))
+
+
+            ).andExpect(status().isNoContent());
+
+            BDDMockito.then(userService).should().removeById(id);
+        }
+
+        @Test
+        @DisplayName("Dado ID inexistente, quando deletar, entao retorne 404")
+        void should_return_404_when_not_exists() throws Exception {
+            var id = UUID.randomUUID();
+            BDDMockito.given(userService.existsById(id)).willReturn(false);
+
+            mockMvc.perform(
+                    delete("/api/users")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                            .content(objectMapper.writeValueAsString(id))
+
+
+            ).andExpect(status().isNotFound());
+        }
+    }
+
+    @Nested
+    @DisplayName("PUT /api/users/{id}")
+    class UpdateUser{
+
+        @Test
+        @DisplayName("Dado ID existente, quando atualizar, entao retorne 201 o service deve ser chamado")
+        void should_return_201_when_update_process_ok() throws Exception {
+
+            var id = UUID.randomUUID();
+
+            BDDMockito.given(userService.existsById(id)).willReturn(true);
+
+
+
+            BDDMockito.given(userService.create(UserDTO.toEntity(correctUser))).willReturn(UserDTO.toEntity(correctUser));
+
+            correctUser.setId(id);
+
+            correctUser.setEmail("novoemail@corrigido.com");
+            mockMvc.perform(
+                    put("/api/users/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                            .content(objectMapper.writeValueAsString(correctUser))
+
+
+            ).andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.id", is(id.toString())))
+                    .andExpect(jsonPath("$.email", is("novoemail@corrigido.com")));
+
+
+        }
+
+        @Test
+        @DisplayName("Dado ID inexistente, quando atualizar, então 404")
+        void should_404_when_update_nonexistent() throws Exception {
+            var id = UUID.randomUUID();
+            BDDMockito.given(userService.existsById(id)).willReturn(false);
+
+            UserDTO req = UserDTO.builder()
+                    .name("Novo")
+                    .email("novo@ex.com")
+                    .password("pwd123")
+                    .build();
+
+            mockMvc.perform(put("/api/users/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                            .content(objectMapper.writeValueAsString(req)))
+                    .andExpect(status().isNotFound());
+        }
+
+
+    }
+
+    @Nested
+    @DisplayName("PATCH /api/users/{id}")
+    class PatChUser{
+
+        @Test
+        @DisplayName("Dado ID existente, quando atualizar, entao retorne 201 o service deve ser chamado")
+        void should_return_201_when_update_process_ok() throws Exception {
+
+            var id = UUID.randomUUID();
+
+            BDDMockito.given(userService.existsById(id)).willReturn(true);
+
+            correctUser.setId(id);
+            BDDMockito.given(userService.create(UserDTO.toEntity(correctUser))).willReturn(UserDTO.toEntity(correctUser));
+
+
+
+            correctUser.setEmail("novoemail@corrigido.com");
+            mockMvc.perform(
+                            patch("/api/users/{id}", id)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .header("Authorization", "Bearer " + buildUthUserAndToken())
+                                    .content(objectMapper.writeValueAsString(correctUser))
+
+
+                    ).andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.id", is(id.toString())))
+                    .andExpect(jsonPath("$.email", is("novoemail@corrigido.com")));
+
+
+        }
+
+        @Test
+        @DisplayName("Dado ID inexistente, quando atualizar, então 404")
+        void should_404_when_update_nonexistent() throws Exception {
+            var id = UUID.randomUUID();
+            BDDMockito.given(userService.existsById(id)).willReturn(false);
+
+            UserDTO req = UserDTO.builder()
+                    .name("Novo")
+                    .email("novo@ex.com")
+                    .password("pwd123")
+                    .build();
+
+            mockMvc.perform(patch("/api/users/{id}", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                            .content(objectMapper.writeValueAsString(req)))
+                    .andExpect(status().isNotFound());
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /api/users?email=...")
+    class FindByEmail {
+
+        @Test
+        @DisplayName("Dado email existente, quando filtrar, então 200 e lista DTO")
+        void should_filter_by_email() throws Exception {
+            var u = User.builder()
+                    .id(UUID.randomUUID())
+                    .name("Fabio")
+                    .email("fabio@ex.com")
+                    .password("pwd")
+                    .build();
+
+            BDDMockito.given(userService.findByEmail("fabio@ex.com")).willReturn(u);
+
+            mockMvc.perform(get("/api/users/").param("email", "fabio@ex.com")
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.email", is("fabio@ex.com")))
+                    .andExpect(jsonPath("$.name", is("Fabio")));
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /api/users/paged")
+    class Paged {
+
+        @Test
+        @DisplayName("Dado paginação válida, quando buscar, então 200 e Page mapeada")
+        void should_return_page() throws Exception {
+
+            var u = User.builder()
+                    .id(UUID.randomUUID())
+                    .name("Gabi")
+                    .email("gabi@ex.com")
+                    .password("pwd")
+                    .build();
+
+            var page = new PageImpl<>(List.of(u), PageRequest.of(0, 10, Sort.by("name")), 1);
+
+            BDDMockito.given(userService.findAllPaged(org.mockito.ArgumentMatchers.<Pageable>any())).willReturn(page);
+
+            mockMvc.perform(get("/api/users/paged")
+                            .param("page", "0")
+                            .param("size", "10")
+                            .header("Authorization", "Bearer " + buildUthUserAndToken())
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content[0].name", is("Gabi")))
+                    .andExpect(jsonPath("$.totalElements", is(1)));
+        }
+    }
+
 }
