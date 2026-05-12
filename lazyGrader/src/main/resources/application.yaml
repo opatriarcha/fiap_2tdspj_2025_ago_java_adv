@@ -1,3 +1,27 @@
 spring:
   application:
     name: lazyGrader
+  ai:
+    openai:
+      api-key: ${OPEN_API_KEY:sk-placeholder-1234567890abcdefghij}
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 0.2
+
+    mcp:
+      client:
+        enabled: true
+        stdio:
+          servers-configuration: classpath:mcp-servers.json
+
+  lazyGrader:
+    work-dir: ${java.io.tmpdir}/grades-repos
+    excel-file: grupos.xslx
+    output-file: result.xslx
+
+
+  logging:
+    level:
+      br.com.fiap.javaadv.lazyGrader: DEBUG
+      org.springframework.ai.: INFO

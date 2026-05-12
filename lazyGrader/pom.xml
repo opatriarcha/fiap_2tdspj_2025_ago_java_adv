@@ -8,7 +8,7 @@
 		<version>3.5.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.fiap.javaadv.</groupId>
+	<groupId>br.com.fiap.javaadv</groupId>
 	<artifactId>lazyGrader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
@@ -55,6 +55,25 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- dependencia para fuckin excel"-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+
+		<!-- bind de json para os prompts -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<!-- para vagabundear, vulgo integrar com o git -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>6.10.0.202406032230-r</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
