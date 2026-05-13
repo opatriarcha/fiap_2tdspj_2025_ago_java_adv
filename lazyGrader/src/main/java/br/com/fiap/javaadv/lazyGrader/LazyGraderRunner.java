@@ -71,7 +71,7 @@ public class LazyGraderRunner implements ApplicationRunner {
 
         List<GradeResult> results = orchestratorService.runEvaluation(excelPath, outputPath, grupos);
 
-        log.info("\n✅ Avaliação concluída! {} grupos avaliados.", results.size());
+        log.info("\n Avaliação concluída! {} grupos avaliados.", results.size());
         log.info("Resultados salvos em: {}", outputPath);
     }
 }
